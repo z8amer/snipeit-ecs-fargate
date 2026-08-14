@@ -15,8 +15,9 @@ permissions:
 
 #Global Environment Variables
 env:
-    AWS_REGION: eu-north-1
+    AWS_REGION: "eu-north-1"
     DOMAIN: "tm.zain-amer.co.uk"
+    AWS_ROLE_ARN: "arn:aws:iam::954405334747:role/GitHubActions-OIDC-Role"
 
 #Run pipeline on Ubuntu if upstream pipeline succeeeded or triggered manually
 jobs:
