@@ -101,7 +101,7 @@ resource "aws_iam_role" "ecs_execution_role" {
         Action = "sts:AssumeRole"
         Effect = "Allow"
         Principal = {
-          Service = "://amazonaws.com" # The exact AWS server principal allowed to assume this role
+          Service = "ecs-tasks.amazonaws.com" # The exact AWS server principal allowed to assume this role
         }
       }
     ]
