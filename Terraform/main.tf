@@ -31,6 +31,6 @@ module "ecs_compute" {
   existing_ecr_url      = var.existing_ecr_url
   vpc_id                = module.vpc.vpc_id
   alb_security_group_id = module.public_load_balancer.alb_security_group_id
-  depends_on            = module.public_load_balancer
+  depends_on            = [module.public_load_balancer]
 }
 
