@@ -58,4 +58,4 @@ jobs:
             
             #Pings the app health endpoint up to 5 times to verify if app is live on domain
             - name: Post Deploy Check
-              run: curl -f --connect-timeout 5 --max-time 10 --retry 5  --retry-delay 1- https://${{env.DOMAIN}}/health
+              run: curl -f --connect-timeout 5 --max-time 10 --retry 5  --retry-delay 1 https://${{env.DOMAIN}}/health
