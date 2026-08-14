@@ -10,7 +10,7 @@ variable "project_name" {
 
 variable "sub_domain" {
   type    = string
-  default = "tm."
+  default = "tm"
 }
 
 variable "dns_ttl" {
