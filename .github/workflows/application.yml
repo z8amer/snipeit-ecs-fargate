@@ -1,0 +1,60 @@
+name: "Snipe-IT App Deployment Pipeline"
+
+#Event Trigger
+on:
+    push:
+        branches: ["main"]
+    workflow_dispatch:
+
+#Request OIDC token from GitHub for AWS authentication & allow permission to read repo files
+permissions:
+    id-token: write
+    contents: read
+
+#Global Environment Variables
+env:
+    AWS_REGION: "eu-north-1"
+    AWS_ROLE_ARN: "arn:aws:iam::954405334747:role/GitHubActions-OIDC-Role"
+    ECR_REPOSITORY: "snipe-it-ecs"
+    DOMAIN: "tm.zain-amer.co.uk"
+
+#Launches Ubuntu runner & export commit image tag
+jobs:
+    build-and-push:
+        name: "Build & Push to ECR"
+        runs-on: ubuntu-latest
+        outputs:
+            image_tag: ${{ steps.set-tag.outputs.tag}}
+
+        #Download repo code onto runner
+        steps:
+          - name: Checkout Code Repository
+            uses: actions/checkout@v4
+
+          #The AWS OIDC Authentication bridge
+          - name: Configure AWS Credentials
+            uses: aws-actions/configure-aws-credentials@v4
+            with:
+              role-to-assume: ${{env.AWS_ROLE_ARN}}
+              role-session-name: docker-build-push
+              aws-region: ${{env.AWS_REGION}}
+          
+          #Logging into AWS ECR Registry
+          - name: Login to ECR
+            id  : login-ecr
+            uses: aws-actions/amazon-ecr-login@v2
+
+          #Extracting the 7-Character Git SHA Tag
+          - name: Extract Short Git SHA Tag
+            id  : set-tag
+            run : echo "tag=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
+
+          #Compiling & pushing the Docker Container Image
+          - name: Build, Tag and Push Docker Image
+            env:
+                ECR_REGISTRY: ${{steps.login-ecr.outputs.registry}}
+                IMAGE_TAG: ${{steps.set-tag.outputs.tag}}
+            run: |
+              docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+              docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+

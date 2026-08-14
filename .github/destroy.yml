@@ -1,0 +1,64 @@
+name: "Terraform Destroy Pipeline"
+
+#Manual execution of pipeline and input needed to validate terraform destroy pipeline to execute
+on: 
+    workflow_dispatch:
+        inputs:
+          confirm:
+              description: "Type YES to confirm to destroy ALL infrastructure"
+              required: true
+
+#Request OIDC token from GitHub for AWS authentication & allow permission to read repo files
+permissions:
+    id-token: write # Allows GitHub to request a OIDC token
+    contents: read # Allows GitHub to check repository code
+
+#Global Environment Variables
+env:
+    AWS_REGION: eu-north-1
+    DOMAIN: "tm.zain-amer.co.uk"
+
+#Initiate Ubuntu machine to execute Terraform Destroy Pipeline
+jobs:
+    destroy-infra:
+        name: "Terraform Destroy Pipeline"
+        runs-on: ubuntu-latest
+
+        #Default to working-directory
+        defaults:
+            run:
+                working-directory: ./Terraform
+
+        #Validation check step to confirm terraform destroy
+        steps:
+          - name: Validation Confirmation
+            run: |
+            if [ "${{github.event.inputs.confirm}}" != "YES"]; then
+            echo "ERROR: Confirmation word 'YES' was not entered correctly. Aborting Destroy pipeline."
+            exit 1
+          fi
+        
+        #Download repo code onto runner
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v4
+
+            #The AWS OIDC Authentication bridge
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                role-to-assume: ${{secrets.AWS_OIDC_ARN}}
+                role-session-name: terraform-plan
+                aws-region: ${{env.AWS_REGION}}
+            
+            #Install official Hashicorp Terraform
+            - name: Setup Terraform
+              uses: hashicorp/setup-terraform@v3
+
+            #Download required plugins and initialise backend state storage
+            - name: Terraform Init
+              run: terraform init
+            
+            #Delete all infrastructure without prompting in the terminal
+            - name: Terraform Destroy
+              run: terraform destroy -auto-approve

@@ -1,0 +1,60 @@
+name: "Terraform Apply Pipeline"
+
+#Allow automatic or manual execution when previous pipeline completes
+on: 
+    workflow_dispatch:
+    workflow_run:
+        workflows: ["Terraform Plan Pipeline"]
+        types:
+            - completed
+
+#Request OIDC token from GitHub for AWS authentication & allow permission to read repo files
+permissions:
+    id-token: write # Allows GitHub to request a OIDC token
+    contents: read # Allows GitHub to check repository code
+
+#Global Environment Variables
+env:
+    AWS_REGION: eu-north-1
+    DOMAIN: "tm.zain-amer.co.uk"
+
+#Run pipeline on Ubuntu if upstream pipeline succeeeded or triggered manually
+jobs:
+    plan-check:
+        name: "Terraform Plan Pipeline"
+        if: ${{github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch'}}
+        runs-on: ubuntu-latest
+        
+        #Default to working-directory
+        defaults:
+            run:
+                working-directory: ./Terraform
+        
+        #Download repo code onto runner
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v4
+     
+            #The AWS OIDC Authentication bridge
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                role-to-assume: ${{secrets.AWS_OIDC_ARN}}
+                role-session-name: terraform-apply
+                aws-region: ${{env.AWS_REGION}}
+            
+            #Install official Hashicorp Terraform 
+            - name: Setup Terraform
+              uses: hashicorp/setup-terraform@v3
+
+            #Download required plugins and initialise backend state storage
+            - name: Terraform Init
+              run: terraform init
+
+            #Preview infrastructue that will be created or modified
+            - name: Terraform apply
+              run: terraform apply -auto-approve
+            
+            #Pings the app health endpoint up to 5 times to verify if app is live on domain
+            - name: Post Deploy Check
+              run: curl -f --connect-timeout 5 --max-time 10 --retry 5  --retry-delay 1- https://${{env.DOMAIN}}/health
