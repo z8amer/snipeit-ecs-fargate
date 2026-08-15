@@ -58,9 +58,48 @@ resource "aws_route_table" "public_route_table" {
   }
 }
 
+#Route all private traffic to NAT
+resource "aws_route_table" "private_route_table" {
+  vpc_id = aws_vpc.main_vpc.id
+
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.main_nat.id
+  }
+
+  tags = {
+    Name = "${var.project_name}-private-rt"
+  }
+}
+
 #Give public subnets the rules of public route table so traffic can flow to them through Internet Gateway.
 resource "aws_route_table_association" "public_subnet_assoc" {
   count          = length(var.public_subnet_cidrs)
   subnet_id      = aws_subnet.public_subnets[count.index].id
   route_table_id = aws_route_table.public_route_table.id
 }
+
+#Allocate Elastic IP
+resource "aws_eip" "nat_eip" {
+  domain     = "vpc"
+  depends_on = [aws_internet_gateway.igw]
+}
+
+#Deploy NAT Gateway in to first public subnet
+resource "aws_nat_gateway" "main_nat" {
+  allocation_id = aws_eip.nat_eip.id
+
+  subnet_id = aws_subnet.public_subnets[0].id
+
+  tags = {
+    Name = "${var.project_name}-nat-gateway"
+  }
+}
+
+#Link route table to all private subnets
+resource "aws_route_table_association" "private_assoc" {
+  count          = length(var.private_subnet_cidrs)
+  subnet_id      = aws_subnet.private_subnets[count.index].id
+  route_table_id = aws_route_table.private_route_table.id
+}
+
