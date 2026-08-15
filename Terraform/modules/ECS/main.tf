@@ -8,6 +8,11 @@ resource "aws_ecs_cluster" "core_cluster" {
   }
 }
 
+resource "random_password" "laravel_app_key" {
+  length  = 32
+  special = false
+}
+
 #Container application configuration
 resource "aws_ecs_task_definition" "app_task" {
   family                   = "${var.project_name}-task"
