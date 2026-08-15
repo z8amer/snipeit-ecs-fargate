@@ -84,3 +84,19 @@ variable "vpc_id" {
   type        = string
   description = "main VPC ID"
 }
+
+variable "app_env_key_name" {
+  type        = string
+  default     = "APP_ENV"
+  description = "name for the environment setting"
+}
+
+variable "app_env" {
+  type    = string
+  default = "production"
+}
+
+variable "app_key_name" {
+  type    = string
+  default = "APP_KEY"
+}
