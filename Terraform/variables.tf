@@ -34,6 +34,11 @@ variable "root_domain" {
   description = "Primary domain of Hosted Zone"
 }
 
+variable "sub_domain" {
+  type    = string
+  default = "tm"
+}
+
 variable "existing_ecr_url" {
   type        = string
   default     = "954405334747.dkr.ecr.eu-north-1.amazonaws.com/snipe-it-ecs"

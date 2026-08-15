@@ -1,12 +1,12 @@
 # Route53 Public Hosted Zone
 data "aws_route53_zone" "primary_zone" {
-  name         = "${var.sub_domain}.${var.root_domain}"
+  name         = var.domain
   private_zone = false
 }
 
 # Request a SSL/TLS certificate from ACM.
 resource "aws_acm_certificate" "acm_cert" {
-  domain_name       = "${var.sub_domain}.${var.root_domain}"
+  domain_name       = var.domain
   validation_method = "DNS"
 
   tags = {
@@ -45,7 +45,7 @@ resource "aws_acm_certificate_validation" "cert_handshake" {
 #Maps subdomain to ALB using Route53 Alias
 resource "aws_route53_record" "alb_alias" {
   zone_id         = data.aws_route53_zone.primary_zone.zone_id
-  name            = "${var.sub_domain}.${var.root_domain}"
+  name            = var.domain
   type            = "A" # Route 53 alias records must always be type A
   allow_overwrite = true
 

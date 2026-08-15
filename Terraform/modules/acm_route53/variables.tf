@@ -1,6 +1,6 @@
-variable "root_domain" {
+variable "domain" {
   type        = string
-  description = "main domain: zain-amer.co.uk"
+  description = "domain name of project"
 }
 
 variable "project_name" {
@@ -9,8 +9,7 @@ variable "project_name" {
 }
 
 variable "sub_domain" {
-  type    = string
-  default = "tm"
+  type = string
 }
 
 variable "dns_ttl" {

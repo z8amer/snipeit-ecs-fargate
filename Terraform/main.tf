@@ -18,7 +18,7 @@ module "public_load_balancer" {
 module "security_acm" {
   source       = "./modules/acm_route53"
   project_name = var.project_name
-  root_domain  = var.root_domain
+  domain       = "${var.sub_domain}.${var.root_domain}"
   alb_dns_name = module.public_load_balancer.alb_dns_name
   alb_zone_id  = module.public_load_balancer.alb_zone_id
 }
