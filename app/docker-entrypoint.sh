@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 
-if [ -z "$APP_KEY" ]; then
-    echo "APP_KEY not set. Generating a new one..."
-    php artisan key:generate --force
-fi
+echo "Optimizing framework caches..."
+php artisan config:cache
+php artisan route:cache
 
+echo "Container booting up cleanly..."
 exec "$@"
