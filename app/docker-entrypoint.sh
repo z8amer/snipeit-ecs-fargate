@@ -1,4 +1,5 @@
 #!/bin/sh
+# force rebuild
 set -e
 
 echo "Optimizing framework caches..."
