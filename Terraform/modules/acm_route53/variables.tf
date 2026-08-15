@@ -8,9 +8,6 @@ variable "project_name" {
   description = "Project name"
 }
 
-variable "sub_domain" {
-  type = string
-}
 
 variable "dns_ttl" {
   type    = number
