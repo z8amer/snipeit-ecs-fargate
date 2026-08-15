@@ -44,9 +44,9 @@ resource "aws_acm_certificate_validation" "cert_handshake" {
 
 #Maps subdomain to ALB using Route53 Alias
 resource "aws_route53_record" "alb_alias" {
-  zone_id = data.aws_route53_zone.primary_zone.zone_id
-  name    = "${var.sub_domain}.${var.root_domain}"
-  type    = "A" # Route 53 alias records must always be type A
+  zone_id         = data.aws_route53_zone.primary_zone.zone_id
+  name            = "${var.sub_domain}.${var.root_domain}"
+  type            = "A" # Route 53 alias records must always be type A
   allow_overwrite = true
 
   alias {
