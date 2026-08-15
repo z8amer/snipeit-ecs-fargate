@@ -1,6 +1,6 @@
 # Route53 Public Hosted Zone
 data "aws_route53_zone" "primary_zone" {
-  name         = var.root_domain
+  name         = "${var.sub_domain}.${var.root_domain}"
   private_zone = false
 }
 
