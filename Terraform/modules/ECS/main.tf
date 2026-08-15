@@ -33,12 +33,12 @@ resource "aws_ecs_task_definition" "app_task" {
         {
           name  = var.app_env_key_name
           value = var.app_env
-         },
+        },
         {
           name  = var.app_key_name
           value = "base64:${base64encode(random_password.laravel_app_key.result)}"
         }
-       ]
+      ]
 
       logConfiguration = {
         logDriver = "awslogs"
