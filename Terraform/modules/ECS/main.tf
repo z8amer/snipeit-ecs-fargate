@@ -36,11 +36,11 @@ resource "aws_ecs_task_definition" "app_task" {
 
       environment = [
         {
-          name  = var.app_env_key_name
+          name  = "APP_ENV"
           value = var.app_env
         },
         {
-          name  = var.app_key_name
+          name  = "APP_KEY"
           value = "${"base64:"}${base64encode(random_password.laravel_app_key.result)}"
         }
       ]
