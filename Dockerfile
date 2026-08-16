@@ -68,5 +68,5 @@ RUN mkdir -p /var/www/html/storage /var/www/html/bootstrap/cache \
 COPY app/docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-ENTRYPOINT ["docker-entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD ["apache2-foreground"]
