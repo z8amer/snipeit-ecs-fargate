@@ -46,7 +46,11 @@ resource "aws_ecs_task_definition" "app_task" {
         {
           name  = "DB_DATABASE"
           value = var.db_file_path
-        }
+        },
+        {
+          name = "APP_URL"
+          value = var.app_url
+        }l
       ]
 
       logConfiguration = {

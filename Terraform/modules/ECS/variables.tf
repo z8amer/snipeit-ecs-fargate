@@ -117,3 +117,8 @@ variable "db_file_path" {
   default     = "/var/www/html/database/database.sqlite"
   description = "storage path for the sqlite file"
 }
+
+variable "app_url" {
+  type        = string
+  default     = "https://tm.zain-amer.co.uk"
+}
