@@ -105,3 +105,15 @@ variable "laravel_app_key" {
   type        = string
   description = "The automated base64 key passed down from the root module"
 }
+
+variable "db_connection_type" {
+  type        = string
+  default     = "sqlite"
+  description = "database engine type"
+}
+
+variable "db_file_path" {
+  type        = string
+  default     = "/var/www/html/database/database.sqlite"
+  description = "storage path for the sqlite file"
+}

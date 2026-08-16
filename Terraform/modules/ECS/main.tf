@@ -38,6 +38,15 @@ resource "aws_ecs_task_definition" "app_task" {
           name  = var.app_key_name
           value = var.laravel_app_key
         }
+
+        {
+          name  = "DB_CONNECTION"
+          value = var.db_connection_type
+        },
+        {
+          name  = "DB_DATABASE"
+          value = var.db_file_path
+        }
       ]
 
       logConfiguration = {
