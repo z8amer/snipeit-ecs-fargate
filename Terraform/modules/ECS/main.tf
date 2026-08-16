@@ -48,7 +48,7 @@ resource "aws_ecs_task_definition" "app_task" {
           value = var.db_file_path
         },
         {
-          name = "APP_URL"
+          name  = "APP_URL"
           value = var.app_url
         }
       ]

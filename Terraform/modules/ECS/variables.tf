@@ -119,6 +119,6 @@ variable "db_file_path" {
 }
 
 variable "app_url" {
-  type        = string
-  default     = "https://tm.zain-amer.co.uk"
+  type    = string
+  default = "https://tm.zain-amer.co.uk"
 }
