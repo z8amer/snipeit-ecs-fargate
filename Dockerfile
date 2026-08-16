@@ -46,13 +46,14 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-av
 # Add rewriting rules directly (no.htaccess needed)
 RUN <<EOF cat > /etc/apache2/conf-available/laravel.conf
 <Directory /var/www/html/public>
-    Options -Indexes
-    AllowOverride None
-    Require all granted
-    RewriteEngine On
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^ /index.php [L]
+	SetEnvIf X-Forwarded-Proto "https" HTTPS=on    
+	Options -Indexes
+    	AllowOverride None
+    	Require all granted
+    	RewriteEngine On
+    	RewriteCond %{REQUEST_FILENAME} !-f
+    	RewriteCond %{REQUEST_FILENAME} !-d
+    	RewriteRule ^ /index.php [L]
 </Directory>
 EOF
 
