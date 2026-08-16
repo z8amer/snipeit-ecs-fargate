@@ -50,7 +50,7 @@ resource "aws_ecs_task_definition" "app_task" {
         {
           name = "APP_URL"
           value = var.app_url
-        }l
+        }
       ]
 
       logConfiguration = {
