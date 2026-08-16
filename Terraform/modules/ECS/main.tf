@@ -8,10 +8,6 @@ resource "aws_ecs_cluster" "core_cluster" {
   }
 }
 
-resource "random_password" "laravel_app_key" {
-  length  = 32
-  special = false
-}
 
 #Container application configuration
 resource "aws_ecs_task_definition" "app_task" {
@@ -33,14 +29,24 @@ resource "aws_ecs_task_definition" "app_task" {
           hostPort      = var.host_port
         }
       ]
-
       environment = [
         {
-          name  = "APP_ENV"
+          name  = var.app_env_key_name
           value = var.app_env
         },
         {
-          name  = "APP_KEY"
+          name  = var.app_key_name
+          value = var.laravel_app_key
+        }
+      ]
+
+      environment = [
+        {
+          name  = var.app_env_key_name
+          value = var.app_env
+        },
+        {
+          name  = var.app_key_name
           value = "${"base64:"}${base64encode(random_password.laravel_app_key.result)}"
         }
       ]

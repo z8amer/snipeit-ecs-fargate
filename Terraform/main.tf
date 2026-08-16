@@ -32,5 +32,10 @@ module "ecs_compute" {
   vpc_id                = module.vpc.vpc_id
   alb_security_group_id = module.public_load_balancer.alb_security_group_id
   depends_on            = [module.public_load_balancer]
+  laravel_app_key       = "base64:${base64encode(random_password.laravel_app_key.result)}"
 }
 
+resource "random_password" "laravel_app_key" {
+  length  = 32
+  special = false
+}

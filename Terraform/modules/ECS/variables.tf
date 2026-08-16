@@ -100,3 +100,8 @@ variable "app_key_name" {
   type    = string
   default = "APP_KEY"
 }
+
+variable "laravel_app_key" {
+  type        = string
+  description = "The automated base64 key passed down from the root module"
+}
