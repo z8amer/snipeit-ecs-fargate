@@ -33,10 +33,10 @@ jobs:
         steps:
           - name: Validation Confirmation
             run: |
-            if [ "${{github.event.inputs.confirm}}" != "YES" ]; then
-            echo "ERROR: Confirmation word 'YES' was not entered correctly. Aborting Destroy pipeline."
-            exit 1
-          fi
+              if [ "${{github.event.inputs.confirm}}" != "YES" ]; then
+                echo "ERROR: Confirmation word 'YES' was not entered correctly. Aborting Destroy pipeline."
+                exit 1
+              fi
         
         #Download repo code onto runner
         steps:
