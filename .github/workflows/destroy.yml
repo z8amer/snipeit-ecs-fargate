@@ -17,6 +17,7 @@ permissions:
 env:
     AWS_REGION: eu-north-1
     DOMAIN: "tm.zain-amer.co.uk"
+    AWS_ROLE_ARN: "arn:aws:iam::954405334747:role/GitHubActions-OIDC-Role"
 
 #Initiate Ubuntu machine to execute Terraform Destroy Pipeline
 jobs:
@@ -46,7 +47,7 @@ jobs:
           - name: Configure AWS Credentials
             uses: aws-actions/configure-aws-credentials@v4
               with:
-                role-to-assume: ${{secrets.AWS_OIDC_ARN}}
+                role-to-assume: ${{env.AWS_ROLE_ARN}}
                 role-session-name: terraform-plan
                 aws-region: ${{env.AWS_REGION}}
             
