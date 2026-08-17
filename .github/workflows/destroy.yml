@@ -25,10 +25,6 @@ jobs:
         name: "Terraform Destroy Pipeline"
         runs-on: ubuntu-latest
 
-        #Default to working-directory
-        defaults:
-            run:
-                working-directory: ./Terraform
 
         #Validation check step to confirm terraform destroy
         steps:
@@ -58,7 +54,9 @@ jobs:
             #Download required plugins and initialise backend state storage
           - name: Terraform Init
             run: terraform init
-            
+            working-directory: ./Terraform
+
             #Delete all infrastructure without prompting in the terminal
           - name: Terraform Destroy
             run: terraform destroy -auto-approve
+            working-directory: ./Terraform  
