@@ -46,7 +46,7 @@ jobs:
             #The AWS OIDC Authentication bridge
           - name: Configure AWS Credentials
             uses: aws-actions/configure-aws-credentials@v4
-              with:
+            with:
                 role-to-assume: ${{env.AWS_ROLE_ARN}}
                 role-session-name: terraform-plan
                 aws-region: ${{env.AWS_REGION}}
