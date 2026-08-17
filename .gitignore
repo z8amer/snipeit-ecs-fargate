@@ -33,3 +33,14 @@ app/storage/ldap_client_tls.cert
 app/storage/ldap_client_tls.key
 app/storage/framework/testing
 app/.phpunit.cache
+
+/.all-contributorsrc
+/.env*
+/.git-blame-ignore-revs
+/.htaccess
+/.nvmrc
+/.pa11yci.json
+/.upgrade_requirements.json
+/app.json
+/Procfile
+/Vagrantfile
