@@ -39,26 +39,25 @@ jobs:
               fi
         
         #Download repo code onto runner
-        steps:
-            - name: Checkout Repository
-              uses: actions/checkout@v4
+          - name: Checkout Repository
+            uses: actions/checkout@v4
 
             #The AWS OIDC Authentication bridge
-            - name: Configure AWS Credentials
-              uses: aws-actions/configure-aws-credentials@v4
+          - name: Configure AWS Credentials
+            uses: aws-actions/configure-aws-credentials@v4
               with:
                 role-to-assume: ${{secrets.AWS_OIDC_ARN}}
                 role-session-name: terraform-plan
                 aws-region: ${{env.AWS_REGION}}
             
             #Install official Hashicorp Terraform
-            - name: Setup Terraform
-              uses: hashicorp/setup-terraform@v3
+          - name: Setup Terraform
+            uses: hashicorp/setup-terraform@v3
 
             #Download required plugins and initialise backend state storage
-            - name: Terraform Init
-              run: terraform init
+          - name: Terraform Init
+            run: terraform init
             
             #Delete all infrastructure without prompting in the terminal
-            - name: Terraform Destroy
-              run: terraform destroy -auto-approve
+          - name: Terraform Destroy
+            run: terraform destroy -auto-approve
