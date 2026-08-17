@@ -28,7 +28,7 @@ jobs:
         #Default to working-directory
         defaults:
             run:
-                working-directory: ./terraform
+                working-directory: Terraform
 
         #Validation check step to confirm terraform destroy
         steps:
